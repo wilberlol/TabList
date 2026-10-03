@@ -4,6 +4,7 @@ version: 5.7.7
 author: montlikadani
 description: An alternative tablist plugin to replace vanilla empty tab
 softdepend:
+- packetevents
 - Vault
 - LuckPerms
 - PermissionsEx

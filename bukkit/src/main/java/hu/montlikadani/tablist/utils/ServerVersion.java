@@ -54,9 +54,21 @@ public enum ServerVersion {
 		return matchingProtocol == null ? name() : matchingProtocol.name();
 	}
 
+	private static final java.util.regex.Pattern VERSION = java.util.regex.Pattern.compile("^(\\d+)\\.(\\d+)");
+
+	/** True on Minecraft 26.x or newer (version string like "26.2.build.2633-stable"). */
+	public static boolean isModern() {
+		java.util.regex.Matcher m = VERSION.matcher(org.bukkit.Bukkit.getBukkitVersion());
+		return m.find() && Integer.parseInt(m.group(1)) >= 26;
+	}
+
 	public static ServerVersion current() {
 		if (current != null)
 			return current;
+
+		if (isModern()) {
+			return current = v1_21_1; // newest known; all feature checks (>= 1.20.4 etc.) are true
+		}
 
 		String name = 'v' + org.bukkit.Bukkit.getBukkitVersion().split("-", 2)[0].replace('.', '_');
 

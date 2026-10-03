@@ -38,8 +38,15 @@ public final class Util {
 	}
 
 	public static String legacyNmsVersion() {
-		return legacyNmsVersion == null ? legacyNmsVersion = Bukkit.getServer().getClass().getPackage().getName()
-				.split("\\.", 4)[3] : legacyNmsVersion;
+		if (legacyNmsVersion == null) {
+			String[] parts = Bukkit.getServer().getClass().getPackage().getName().split("\\.", 4);
+
+			// Minecraft 26.x+ has no version in the CraftBukkit package (org.bukkit.craftbukkit); callers only use
+			// this for legacy class lookups, so a placeholder is fine there.
+			legacyNmsVersion = parts.length > 3 ? parts[3] : "unversioned";
+		}
+
+		return legacyNmsVersion;
 	}
 
 	public static String applyTextFormat(String value) {
